@@ -29,17 +29,7 @@ export class CoursesService {
   }
 
   async updateByCode(codigo: string, updateCourseDto: UpdateCourseDto): Promise<Course> {
-    const updatedCourse = await this.courseModel
-      .findOneAndUpdate({ codigo }, updateCourseDto, { new: true })
-      .exec();
-    if (!updatedCourse) {
-      throw new NotFoundException(`Course with code ${codigo} not found`);
-    }
-    return updatedCourse;
-  }
-
-  async patchByCode(codigo: string, updateCourseDto: UpdateCourseDto): Promise<Course> {
-    // Primero obtenemos el curso actual
+    // Primero verificamos si el curso existe
     const existingCourse = await this.courseModel.findOne({ codigo }).exec();
     if (!existingCourse) {
       throw new NotFoundException(`Course with code ${codigo} not found`);
@@ -53,12 +43,16 @@ export class CoursesService {
       return acc;
     }, {});
 
-    // Actualizamos solo los campos proporcionados
+    // Actualizamos el curso
     const updatedCourse = await this.courseModel
       .findOneAndUpdate({ codigo }, { $set: updateData }, { new: true })
       .exec();
 
     return updatedCourse;
+  }
+
+  async patchByCode(codigo: string, updateCourseDto: UpdateCourseDto): Promise<Course> {
+    return this.updateByCode(codigo, updateCourseDto);
   }
 
   async removeByCode(codigo: string): Promise<Course> {

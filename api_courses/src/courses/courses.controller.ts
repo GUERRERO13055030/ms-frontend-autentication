@@ -8,7 +8,7 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -40,6 +40,7 @@ export class CoursesController {
   @ApiOperation({ summary: 'Get a course by code' })
   @ApiResponse({ status: 200, description: 'Return the course.' })
   @ApiResponse({ status: 404, description: 'Course not found.' })
+  @ApiParam({ name: 'codigo', type: String })
   findOne(@Param('codigo') codigo: string): Promise<Course> {
     return this.coursesService.findOneByCode(codigo);
   }
@@ -48,29 +49,32 @@ export class CoursesController {
   @ApiOperation({ summary: 'Update a course by code (full update)' })
   @ApiResponse({ status: 200, description: 'The course has been successfully updated.' })
   @ApiResponse({ status: 404, description: 'Course not found.' })
+  @ApiParam({ name: 'codigo', type: String })
   update(
-    @Param('codigo') getCourseDto: GetCourseDto,
+    @Param('codigo') codigo: string,
     @Body() updateCourseDto: UpdateCourseDto,
   ): Promise<Course> {
-    return this.coursesService.updateByCode(getCourseDto.codigo, updateCourseDto);
+    return this.coursesService.updateByCode(codigo, updateCourseDto);
   }
 
   @Patch(':codigo')
   @ApiOperation({ summary: 'Update a course by code (partial update)' })
   @ApiResponse({ status: 200, description: 'The course has been successfully updated.' })
   @ApiResponse({ status: 404, description: 'Course not found.' })
+  @ApiParam({ name: 'codigo', type: String })
   patch(
-    @Param('codigo') getCourseDto: GetCourseDto,
+    @Param('codigo') codigo: string,
     @Body() updateCourseDto: UpdateCourseDto,
   ): Promise<Course> {
-    return this.coursesService.patchByCode(getCourseDto.codigo, updateCourseDto);
+    return this.coursesService.patchByCode(codigo, updateCourseDto);
   }
 
   @Delete(':codigo')
   @ApiOperation({ summary: 'Delete a course by code' })
   @ApiResponse({ status: 200, description: 'The course has been successfully deleted.' })
   @ApiResponse({ status: 404, description: 'Course not found.' })
-  remove(@Param('codigo') deleteCourseDto: DeleteCourseDto): Promise<Course> {
-    return this.coursesService.removeByCode(deleteCourseDto.codigo);
+  @ApiParam({ name: 'codigo', type: String })
+  remove(@Param('codigo') codigo: string): Promise<Course> {
+    return this.coursesService.removeByCode(codigo);
   }
 } 
