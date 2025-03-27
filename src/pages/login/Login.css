@@ -91,12 +91,19 @@ h2 {
   justify-content: center;
   gap: 10px;
   font-size: 1rem;
-  margin-top: 20px
+  margin-top: 20px;
 }
 
 .google-login-btn:hover {
   background-color: #f0f0f0;
 }
+
+.recaptcha-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; 
+}
+
 
 /* Responsiveness */
 @media (max-width: 768px) {
